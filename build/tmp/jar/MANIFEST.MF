@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Title: CTR-main
-Implementation-Version: 1.0
-Specification-Vendor: examplemodsareus
-Specification-Title: examplemod
-Implementation-Timestamp: 2023-10-19T17:52:30+0300
-Specification-Version: 1
-Implementation-Vendor: examplemodsareus
-
