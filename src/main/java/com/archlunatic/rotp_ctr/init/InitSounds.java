@@ -18,12 +18,8 @@ public class InitSounds {
     public static final Supplier<SoundEvent> CATCHTHERAINBOW_SUMMON = ModSounds.STAND_SUMMON_DEFAULT;
     
     public static final Supplier<SoundEvent> CATCHTHERAINBOW_UNSUMMON = ModSounds.STAND_UNSUMMON_DEFAULT;
-    
-    public static final Supplier<SoundEvent> CATCHTHERAINBOW_PUNCH_LIGHT = ModSounds.STAND_PUNCH_LIGHT;
-    
-    public static final Supplier<SoundEvent> CATCHTHERAINBOW_PUNCH_HEAVY = ModSounds.STAND_PUNCH_HEAVY;
-    
-    public static final Supplier<SoundEvent> CATCHTHERAINBOW_BARRAGE = ModSounds.STAND_PUNCH_LIGHT;
+
+
 	
     static final OstSoundList CATCHTHERAINBOW_OST = new OstSoundList(new ResourceLocation(RotpCtrAddon.MOD_ID, "catch_the_rainbow_ost"), SOUNDS);
 
