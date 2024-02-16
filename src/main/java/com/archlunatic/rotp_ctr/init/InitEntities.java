@@ -13,6 +13,6 @@ public class InitEntities {
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, RotpCtrAddon.MOD_ID);
 
     public static final RegistryObject<EntityType<CtRainBladeEntity>> CTR_RAIN_BLADE = ENTITIES.register("ctr_rain_blade", () -> EntityType.Builder.<CtRainBladeEntity>of(CtRainBladeEntity::new, EntityClassification.MISC)
-            .sized(0.5F, 0.5F).noSummon().noSave().setUpdateInterval(10)
+            .sized(0.5F, 0.5F).noSave().setUpdateInterval(10)
             .build(RotpCtrAddon.MOD_ID + ":ctr_rain_blade"));
 }

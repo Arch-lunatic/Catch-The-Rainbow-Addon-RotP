@@ -6,7 +6,8 @@ import com.archlunatic.rotp_ctr.action.stand.RainBlades;
 import com.archlunatic.rotp_ctr.entity.stand.stands.CatchTheRainbowEntity;
 import com.archlunatic.rotp_ctr.action.stand.projectile.CatchTheRainbowRainBlade;
 import com.archlunatic.rotp_ctr.action.stand.CtrTeleport;
-import com.archlunatic.rotp_ctr.power.impl.stand.stats.RainStopperStandStats;
+import com.github.standobyte.jojo.init.power.stand.ModStandsInit;
+import com.github.standobyte.jojo.power.impl.stand.stats.StandStats;
 
 import com.github.standobyte.jojo.action.Action;
 import com.github.standobyte.jojo.action.stand.StandAction;
@@ -19,9 +20,6 @@ import com.github.standobyte.jojo.power.impl.stand.type.StandType;
 
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
-
-import static com.github.standobyte.jojo.init.power.stand.ModStandsInit.PART_7_NAME;
-import static com.github.standobyte.jojo.init.power.stand.ModStandsInit.STAND_TYPES;
 
 public class InitStands {
     @SuppressWarnings("unchecked")
@@ -36,7 +34,7 @@ public class InitStands {
     public static final RegistryObject<CatchTheRainbowRainBlade> CATCH_THE_RAINBOW_RAIN_BLADE = ACTIONS.register("catch_the_rainbow_rain_blade",
             () -> new CatchTheRainbowRainBlade(new StandEntityAction.Builder().staminaCost(25).cooldown(10)
                     .resolveLevelToUnlock(0).autoSummonStand()
-                    .standSound(ModSounds.CRAZY_DIAMOND_FIX_STARTED)));
+                    .standSound(InitSounds.CATCHTHERAINBOW_BLADE)));
 
     public static final RegistryObject<RainBlades> CATCH_THE_RAINBOW_RAIN_BLADES = ACTIONS.register("catch_the_rainbow_rain_blades",
             () -> new RainBlades(new StandAction.Builder().staminaCost(25).cooldown(10)
@@ -49,16 +47,16 @@ public class InitStands {
                     .ignoresPerformerStun(), ModSounds.STAR_PLATINUM_TIME_STOP_BLINK));
 
     public static final RegistryObject<AddTemporaryHealth> CATCH_THE_RAINBOW_RAIN_ADD_TEMPORARY_HEALTH = ACTIONS.register("catch_the_rainbow_add_temporary_health",
-            () -> new AddTemporaryHealth(new StandAction.Builder().holdToFire(40, false).staminaCost(580).cooldown(180)
+            () -> new AddTemporaryHealth(new StandAction.Builder().holdToFire(30, false).staminaCost(580).cooldown(180)
                     .resolveLevelToUnlock(2).autoSummonStand()
-                    .ignoresPerformerStun(), ModSounds.CRAZY_DIAMOND_FIX_STARTED));
+                    .ignoresPerformerStun(), InitSounds.CATCHTHERAINBOW_HEAL));
 
-    public static final EntityStandRegistryObject<EntityStandType<RainStopperStandStats>, StandEntityType<CatchTheRainbowEntity>> STAND_CATCHTHERAINBOW =
+    public static final EntityStandRegistryObject<EntityStandType<StandStats>, StandEntityType<CatchTheRainbowEntity>> STAND_CATCHTHERAINBOW =
             new EntityStandRegistryObject<>("catch_the_rainbow",
-                    STAND_TYPES,
-                    () -> new EntityStandType.Builder<RainStopperStandStats>()
+                    STANDS,
+                    () -> new EntityStandType.Builder<StandStats>()
                     .color(0x2967a2)
-                    .storyPartName(PART_7_NAME)
+                    .storyPartName(ModStandsInit.PART_7_NAME)
                     .leftClickHotbar(
                             CATCH_THE_RAINBOW_RAIN_BLADE.get(),
                             CATCH_THE_RAINBOW_RAIN_BLADES.get()
@@ -67,7 +65,7 @@ public class InitStands {
                             CATCH_THE_RAINBOW_RAIN_BLINK.get(),
                             CATCH_THE_RAINBOW_RAIN_ADD_TEMPORARY_HEALTH.get()
                             )
-                    .defaultStats(RainStopperStandStats.class, new RainStopperStandStats.Builder()
+                    .defaultStats(StandStats.class, new StandStats.Builder()
                             .tier(6)
                             .power(9.0)
                             .speed(9.0)

@@ -54,7 +54,7 @@ public class CtRainBladeEntity extends ModdedProjectileEntity {
     public int ticksLifespan() {return 100;}
 
     @Override
-    protected float getBaseDamage(){return 8.0F;}//добавить расчет от силы стенда
+    protected float getBaseDamage(){return 8.0F;}
 
     @Override
     protected float getMaxHardnessBreakable() {return 0;}
