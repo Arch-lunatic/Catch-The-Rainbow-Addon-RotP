@@ -1,0 +1,14 @@
+{
+  "throwing_blade": {
+    "sounds": [ "rotp_ctr:stand/throwing_blade1", "rotp_ctr:stand/throwing_blade2", "rotp_ctr:stand/throwing_blade3" ]
+  },
+  "rain_heal": {
+    "sounds": [ "rotp_ctr:stand/rain_heal" ]
+  },
+  "catch_the_rainbow_summon": {
+    "sounds": [ "rotp_ctr:stand/catch_the_rainbow_summon" ]
+  },
+  "catch_the_rainbow_unsummon": {
+    "sounds": [ "rotp_ctr:stand/catch_the_rainbow_unsummon" ]
+  }
+}
