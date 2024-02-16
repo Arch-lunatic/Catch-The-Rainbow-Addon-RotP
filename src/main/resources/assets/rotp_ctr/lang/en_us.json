@@ -2,8 +2,8 @@
   "entity.rotp_ctr.catch_the_rainbow": "Catch The Rainbow",
   "stand.rotp_ctr.catch_the_rainbow": "Catch The Rainbow",
 
-  "action.rotp_ctr.catch_the_rainbow_rain_blade": "Blade made of rain",
-  "action.rotp_ctr.catch_the_rainbow_rain_blades": "Aura of blades made of rain",
+  "action.rotp_ctr.catch_the_rainbow_rain_blade": "Rain blade",
+  "action.rotp_ctr.catch_the_rainbow_rain_blades": "Aura of rain blades",
 
   "action.rotp_ctr.catch_the_rainbow_rain_blink": "Rain Teleport",
   "action.rotp_ctr.catch_the_rainbow_add_temporary_health": "Temporary heal",

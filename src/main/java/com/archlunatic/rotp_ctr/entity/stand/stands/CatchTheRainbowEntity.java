@@ -65,7 +65,7 @@ public class CatchTheRainbowEntity extends StandEntity {
         }
         if (level.isClientSide()) {
             if (isInRain(user)){
-                if (prevUserPos != null && !blockPos.below().equals(prevUserPos)) {
+                if (prevUserPos != null && !blockPos.below().equals(prevUserPos) && level.getBlockState(blockPos.below())==Blocks.BARRIER.defaultBlockState()) {
                     level.setBlock(prevUserPos, Blocks.AIR.defaultBlockState(), 3);
                     prevUserPos = null;
                 }
@@ -112,10 +112,11 @@ public class CatchTheRainbowEntity extends StandEntity {
         return entity.level.isRainingAt(blockPos) || entity.level.isRainingAt(new BlockPos(blockPos.getX(), entity.getBoundingBox().maxY, blockPos.getZ()));
     }
 
-    private static final AttributeModifier REACH_DISTANCE_BUFF = new AttributeModifier(
-            UUID.fromString("c137f815-2f58-4fc7-ad4d-a573249f90e0"), "Reach distance buff", 3, AttributeModifier.Operation.MULTIPLY_BASE);
     private static final AttributeModifier ATTACK_DISTANCE_BUFF = new AttributeModifier(
             UUID.fromString("0fa53f0f-7ea0-42a3-98da-40f06e523caf"), "Attack distance buff", 3, AttributeModifier.Operation.MULTIPLY_BASE);
+
+    private static final AttributeModifier REACH_DISTANCE_BUFF = new AttributeModifier(
+            UUID.fromString("c137f815-2f58-4fc7-ad4d-a573249f90e0"), "Reach distance buff", 3, AttributeModifier.Operation.MULTIPLY_BASE);
 
     @Override
     public void setUserAndPower(LivingEntity user, IStandPower power) {
