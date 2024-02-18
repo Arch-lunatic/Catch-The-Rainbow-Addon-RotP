@@ -53,14 +53,4 @@ public class CatchTheRainbowRainBlade extends StandEntityAction {
         }
         return cooldown;
     }
-
-//    @Override
-//    protected void playSoundAtStand(World world, StandEntity standEntity, SoundEvent sound, IStandPower standPower, Phase phase) {
-//        if (world.isClientSide() && phase == Phase.WINDUP && sound == ModSounds.CRAZY_DIAMOND_FIX_STARTED.get()) {
-//            ClientTickingSoundsHelper.playStandEntityCancelableActionSound(standEntity, sound, this, phase, 1.0F, 1.0F, false);
-//        }
-//        else {
-//            super.playSoundAtStand(world, standEntity, sound, standPower, phase);
-//        }
-//    }
 }

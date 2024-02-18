@@ -43,7 +43,7 @@ public class CtrTeleport extends StandAction {
         return entity.level.isRainingAt(blockPos) || entity.level.isRainingAt(new BlockPos(blockPos.getX(), entity.getBoundingBox().maxY, blockPos.getZ()));
     }
     
-    private static final double MAX_DISTANCE = 1600;
+    private static final double MAX_DISTANCE = 1360;
     @Override
     protected void perform(World world, LivingEntity user, IStandPower power, ActionTarget target) {
         SoundEvent sound = blinkSound.get();
@@ -51,7 +51,7 @@ public class CtrTeleport extends StandAction {
         if (sound != null) {
             user.playSound(sound, 1.0F, 1.0F);
         }
-        double distance = (MAX_DISTANCE/getStaminaCost(power))*(power.getStamina()/power.getMaxStamina()); //20m*%
+        double distance = 3 + (MAX_DISTANCE/getStaminaCost(power))*(power.getStamina()/power.getMaxStamina()); //3 + 17m*%
 
         Vector3d blinkPos = null;
         if (target.getType() == TargetType.EMPTY) {

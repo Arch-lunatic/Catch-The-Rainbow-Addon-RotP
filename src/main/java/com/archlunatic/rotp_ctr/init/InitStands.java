@@ -35,10 +35,9 @@ public class InitStands {
             () -> new CatchTheRainbowRainBlade(new StandEntityAction.Builder().staminaCost(25).cooldown(10)
                     .resolveLevelToUnlock(0).autoSummonStand()
                     .standSound(InitSounds.CATCHTHERAINBOW_BLADE)));
-
     public static final RegistryObject<RainBlades> CATCH_THE_RAINBOW_RAIN_BLADES = ACTIONS.register("catch_the_rainbow_rain_blades",
             () -> new RainBlades(new StandAction.Builder().staminaCost(25).cooldown(10)
-                    .resolveLevelToUnlock(1).autoSummonStand()
+                    .resolveLevelToUnlock(0).autoSummonStand()//1
                     .ignoresPerformerStun()));
 
 	public static final RegistryObject<CtrTeleport> CATCH_THE_RAINBOW_RAIN_BLINK = ACTIONS.register("catch_the_rainbow_rain_blink",
@@ -48,7 +47,7 @@ public class InitStands {
 
     public static final RegistryObject<AddTemporaryHealth> CATCH_THE_RAINBOW_RAIN_ADD_TEMPORARY_HEALTH = ACTIONS.register("catch_the_rainbow_add_temporary_health",
             () -> new AddTemporaryHealth(new StandAction.Builder().holdToFire(30, false).staminaCost(580).cooldown(180)
-                    .resolveLevelToUnlock(2).autoSummonStand()
+                    .resolveLevelToUnlock(0).autoSummonStand()//2
                     .ignoresPerformerStun(), InitSounds.CATCHTHERAINBOW_HEAL));
 
     public static final EntityStandRegistryObject<EntityStandType<StandStats>, StandEntityType<CatchTheRainbowEntity>> STAND_CATCHTHERAINBOW =

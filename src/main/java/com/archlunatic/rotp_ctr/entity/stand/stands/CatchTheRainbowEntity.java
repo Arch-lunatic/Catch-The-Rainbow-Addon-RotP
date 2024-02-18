@@ -13,6 +13,10 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -41,23 +45,35 @@ public class CatchTheRainbowEntity extends StandEntity {
     public void tick() {
         super.tick();
 
-        LivingEntity user = getUser();
-        assert user != null;
-        BlockPos blockPos = user.blockPosition();
+        LivingEntity user = getUser(); assert user != null;
+        BlockPos BelowBlockPosition = user.blockPosition().below();
         if (!user.level.isClientSide()) {
             if (isInRain(user)) {
                 if (user.hasEffect(Effects.ABSORPTION)) {
                     IStandPower.getStandPowerOptional(user).ifPresent(power -> {power.consumeStamina(1.5F);});
                 }
-                if (!blockPos.below().equals(prevUserPos) && level.getBlockState(blockPos.below())==Blocks.BARRIER.defaultBlockState()) {
+                if (!BelowBlockPosition.equals(prevUserPos) && level.getBlockState(BelowBlockPosition)==Blocks.BARRIER.defaultBlockState()) {
                     IStandPower.getStandPowerOptional(user).ifPresent(power -> {power.consumeStamina(1);});
                 }
+//                Vector3d position = null;
                 if (isActive()){
-                    AxisAlignedBB area = getBoundingBox().inflate(radiusOfRainKillAura());
-                    List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class,
-                            area, entity -> !(entity instanceof StandEntity) && entity != getUser());
-                    for (Entity entity : entities){ if (isInRain(entity)) entity.hurt(DamageSource.CACTUS, RainType() ? (float) (5/getUserPower().getType().getStats().getBasePower()) : (float) (6/getUserPower().getType().getStats().getBasePower()) );}
-                    IStandPower.getStandPowerOptional(user).ifPresent(power -> {power.consumeStamina(RainType() ? (float) (getUserPower().getType().getStats().getBasePower()/getUserPower().getType().getStats().getBasePrecision()) : (float) (getUserPower().getType().getStats().getBasePower()/getUserPower().getType().getStats().getBasePrecision()+1));});
+                    //if (isCount==30) {
+                        double BasePrecision = getUserPower().getType().getStats().getBasePrecision();
+                        double BasePower = getUserPower().getType().getStats().getBasePower();
+                        AxisAlignedBB area = getBoundingBox().inflate(radiusOfRainKillAura());
+                        List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class,
+                                area, entity -> !(entity instanceof StandEntity) && entity != getUser());
+                        for (Entity entity : entities) {
+                            if (isInRain(entity)) {
+//                                position = entity.position();
+                                entity.hurt(DamageSource.CACTUS, RainType() ? (float) (5/BasePower) : (float) (6/BasePower));}}
+//                                SpawnBlade(position);}
+
+                        IStandPower.getStandPowerOptional(user).ifPresent(power -> {
+                            power.consumeStamina(RainType() ? (float) (BasePower / BasePrecision) : (float) (BasePower / BasePrecision + 1));
+                        });
+//                        Count(1);
+//                    }else{Count(isCount()+1); }
                 }
             }
 //            if (!isInRain(user)) {}
@@ -65,30 +81,30 @@ public class CatchTheRainbowEntity extends StandEntity {
         }
         if (level.isClientSide()) {
             if (isInRain(user)){
-                if (prevUserPos != null && !blockPos.below().equals(prevUserPos) && level.getBlockState(blockPos.below())==Blocks.BARRIER.defaultBlockState()) {
+                if (prevUserPos != null && !BelowBlockPosition.equals(prevUserPos) && level.getBlockState(prevUserPos)==Blocks.BARRIER.defaultBlockState()) {
                     level.setBlock(prevUserPos, Blocks.AIR.defaultBlockState(), 3);
                     prevUserPos = null;
                 }
-                if (level.getBlockState(blockPos.below()).isAir() && (Objects.requireNonNull(getUserPower()).getStamina() >= 30)) {
-                    level.setBlock(blockPos.below(), Blocks.BARRIER.defaultBlockState(), 3);//добавить частицы воды
-                    prevUserPos = blockPos.below();
+                if (level.getBlockState(BelowBlockPosition).isAir() && (Objects.requireNonNull(getUserPower()).getStamina() >= 150)) {
+                    level.setBlock(BelowBlockPosition, Blocks.BARRIER.defaultBlockState(), 3); //TOdo добавить частицы воды
+                    prevUserPos = BelowBlockPosition;
                 }
-                if (user.isShiftKeyDown() && level.getBlockState(blockPos.below())==Blocks.BARRIER.defaultBlockState()){
-                    level.setBlock(prevUserPos, Blocks.AIR.defaultBlockState(), 3);//добавить частицы воды
+                if (user.isShiftKeyDown() && level.getBlockState(BelowBlockPosition)==Blocks.BARRIER.defaultBlockState()) {
+                    level.setBlock(prevUserPos, Blocks.AIR.defaultBlockState(), 3);
                     prevUserPos = null;
                 }
-                if (prevUserPos != null && !(Objects.requireNonNull(getUserPower()).getStamina() >= 30)) {
-                    level.setBlock(prevUserPos, Blocks.AIR.defaultBlockState(), 3);//добавить частицы воды
+                if (prevUserPos != null && level.getBlockState(BelowBlockPosition)==Blocks.BARRIER.defaultBlockState() && !(Objects.requireNonNull(getUserPower()).getStamina() >= 150)) {
+                    level.setBlock(prevUserPos, Blocks.AIR.defaultBlockState(), 3);
                     prevUserPos = null;
                 }
             }
             if (!isInRain(user)) {
-                if (level.getBlockState(blockPos.below())==Blocks.BARRIER.defaultBlockState()) {
-                    level.setBlock(prevUserPos, Blocks.AIR.defaultBlockState(), 3);//добавить частицы воды
+                if (level.getBlockState(BelowBlockPosition)==Blocks.BARRIER.defaultBlockState()) {
+                    level.setBlock(prevUserPos, Blocks.AIR.defaultBlockState(), 3);
                     prevUserPos = null;
                 }
-                if (prevUserPos != null && level.getBlockState(blockPos.below())!=Blocks.BARRIER.defaultBlockState()){
-                    level.setBlock(prevUserPos, Blocks.AIR.defaultBlockState(), 3);//добавить частицы воды
+                if (prevUserPos != null && level.getBlockState(BelowBlockPosition)!=Blocks.BARRIER.defaultBlockState()) {
+                    level.setBlock(prevUserPos, Blocks.AIR.defaultBlockState(), 3);
                     prevUserPos = null;
                 }
                 getUser().removeEffect(Effects.ABSORPTION);
@@ -97,6 +113,15 @@ public class CatchTheRainbowEntity extends StandEntity {
             if (Objects.requireNonNull(user.getAttribute(Attributes.MAX_HEALTH)).getBaseValue() >= 20) getUser().removeEffect(Effects.ABSORPTION);
         }
     }
+
+//    private int isCount;
+//    public int isCount(){return isCount;}
+//    public void Count(int isCount) {this.isCount = isCount;}
+//
+//    public void SpawnBlade(Vector3d position) {
+//        MinecraftServer source = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
+//        source.getCommands().performCommand(source.createCommandSourceStack(), String.format("summon rotp_ctr:ctr_rain_blade %.2f %.2f %.2f {Motion:[0.0, -1.0, 0.0]}", position.x, position.y + 5F, position.z));
+//    }/execute at Dev run particle minecraft:dripping_water ~ ~ ~0.1 0 0.1 1 1 1
 
     private float radiusOfRainKillAura() {
         return 25*(Objects.requireNonNull(getUserPower()).getStamina()/getUserPower().getMaxStamina());}
@@ -112,11 +137,11 @@ public class CatchTheRainbowEntity extends StandEntity {
         return entity.level.isRainingAt(blockPos) || entity.level.isRainingAt(new BlockPos(blockPos.getX(), entity.getBoundingBox().maxY, blockPos.getZ()));
     }
 
-    private static final AttributeModifier ATTACK_DISTANCE_BUFF = new AttributeModifier(
-            UUID.fromString("0fa53f0f-7ea0-42a3-98da-40f06e523caf"), "Attack distance buff", 3, AttributeModifier.Operation.MULTIPLY_BASE);
-
     private static final AttributeModifier REACH_DISTANCE_BUFF = new AttributeModifier(
             UUID.fromString("c137f815-2f58-4fc7-ad4d-a573249f90e0"), "Reach distance buff", 3, AttributeModifier.Operation.MULTIPLY_BASE);
+
+    private static final AttributeModifier ATTACK_DISTANCE_BUFF = new AttributeModifier(
+            UUID.fromString("0fa53f0f-7ea0-42a3-98da-40f06e523caf"), "Attack distance buff", 3, AttributeModifier.Operation.MULTIPLY_BASE);
 
     @Override
     public void setUserAndPower(LivingEntity user, IStandPower power) {

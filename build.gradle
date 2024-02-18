@@ -151,7 +151,7 @@ dependencies {
 jar {
     manifest {
         attributes([
-            "Specification-Title": "RotP_CTR",
+            "Specification-Title": "RotP_Catch-the-Rainbow",
             "Specification-Vendor": "RotP_CTRsareus",
             "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
