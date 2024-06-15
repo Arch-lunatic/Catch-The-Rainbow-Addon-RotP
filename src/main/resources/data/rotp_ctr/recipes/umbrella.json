@@ -1,0 +1,27 @@
+{
+  "type": "jojo:crafting_shaped_stand",
+  "pattern": [
+    "lll",
+    " ib",
+    "ii "
+  ],
+  "key": {
+    "i": {
+      "tag": "forge:ingots/iron"
+    },
+    "l": {
+      "tag": "forge:leather"
+    },
+    "b": {
+      "tag": "forge:dyes/blue"
+    }
+  },
+  "stand": [
+    {
+      "name": "rotp_ctr:catch_the_rainbow"
+    }
+  ],
+  "result": {
+    "item": "rotp_ctr:umbrella"
+  }
+}
