@@ -1,21 +1,23 @@
 package com.archlunatic.rotp_ctr.client.render.entity.model.projectile;
-import com.archlunatic.rotp_ctr.entity.damaging.projectile.CtRainBladeEntity;
+
+import com.archlunatic.rotp_ctr.entity.damaging.projectile.CatchTheRainbowRainBladeEntity1;
 
 import com.github.standobyte.jojo.client.render.CustomVerticesModelBox;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import static com.github.standobyte.jojo.client.ClientUtil.setRotationAngle;
 
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.util.Direction;
 
 
-public class CtRainBladeModel extends EntityModel<CtRainBladeEntity> {
+public class CatchTheRainbowRainBladeModel1 extends EntityModel<CatchTheRainbowRainBladeEntity1> {
 
     private final ModelRenderer waterCutter;
-    public CtRainBladeModel() {
-        super();
+    public CatchTheRainbowRainBladeModel1() {
+        super(RenderType::entityTranslucent);
         ModelRenderer cutter;
         ModelRenderer water;
 
@@ -24,7 +26,6 @@ public class CtRainBladeModel extends EntityModel<CtRainBladeEntity> {
 
         waterCutter = new ModelRenderer(this);
         waterCutter.setPos(0.0F, -3.1F, 0.0F);
-
 
         cutter = new ModelRenderer(this);
         cutter.setPos(0.6F, -3.0F, -3.0F);
@@ -68,7 +69,7 @@ public class CtRainBladeModel extends EntityModel<CtRainBladeEntity> {
     }
 
     @Override
-    public void setupAnim(CtRainBladeEntity entity, float walkAnimPos, float walkAnimSpeed, float ticks, float yRotationOffset, float xRotation) {
+    public void setupAnim(CatchTheRainbowRainBladeEntity1 entity, float walkAnimPos, float walkAnimSpeed, float ticks, float yRotationOffset, float xRotation) {
         waterCutter.yRot = yRotationOffset * ((float)Math.PI / 180F);
         waterCutter.xRot = xRotation * ((float)Math.PI / 180F);
     }

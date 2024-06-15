@@ -2,56 +2,70 @@ package com.archlunatic.rotp_ctr.action.stand;
 
 import java.util.function.Supplier;
 
-import javax.annotation.Nonnull;
+import com.archlunatic.rotp_ctr.entity.stand.stands.CatchTheRainbowEntity;
+import com.archlunatic.rotp_ctr.init.InitEffects;
+import com.archlunatic.rotp_ctr.util.addon.JojoAddonUtil;
+import static com.archlunatic.rotp_ctr.entity.stand.stands.CatchTheRainbowEntity.isInRain;
 
 import com.github.standobyte.jojo.action.ActionConditionResult;
 import com.github.standobyte.jojo.action.ActionTarget;
 import com.github.standobyte.jojo.action.ActionTarget.TargetType;
 import com.github.standobyte.jojo.action.stand.StandAction;
 import com.github.standobyte.jojo.entity.stand.StandEntity;
+import com.github.standobyte.jojo.init.ModStatusEffects;
 import com.github.standobyte.jojo.power.impl.stand.IStandPower;
 import com.github.standobyte.jojo.util.general.MathUtil;
 import com.github.standobyte.jojo.util.mod.JojoModUtil;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
-public class CtrTeleport extends StandAction {
-    final Supplier<SoundEvent> blinkSound;
-    
-    public CtrTeleport(StandAction.Builder builder, 
-            @Nonnull Supplier<SoundEvent> blinkSound) {
+import javax.annotation.Nullable;
+
+public class CatchTheRainbowTeleport extends StandAction {
+
+    @Nullable
+    private final Supplier<SoundEvent> blinkSound;
+    public CatchTheRainbowTeleport(StandAction.Builder builder, @Nullable Supplier<SoundEvent> blinkSound) {
         super(builder);
         this.blinkSound = blinkSound;
     }
     
     @Override
     protected ActionConditionResult checkSpecificConditions(LivingEntity user, IStandPower power, ActionTarget target) {
-        if (!isInRain(user)) {
-            return conditionMessage("needs_rain");
+        PlayerEntity player = (PlayerEntity) user;
+        if (!isInRain(player)) {
+            if(!player.isCreative()){
+                return conditionMessage("needs_rain");
+            }
+        }
+
+        if(user.hasEffect(InitEffects.RAIN_MERGE.get())){
+            if(!player.isCreative()) {
+                return conditionMessage("dont_have_merge");
+            }
+        }
+
+        if (power.getStamina() <= 25){
+            return conditionMessage("not_enough_stamina");
         }
         return super.checkSpecificConditions(user, power, target);
     }
     
-    private boolean isInRain(Entity entity) { // пришлось скопировать из ваниллы, т.к. там этот метод приватный
-        BlockPos blockPos = entity.blockPosition();
-        return entity.level.isRainingAt(blockPos) || entity.level.isRainingAt(new BlockPos(blockPos.getX(), entity.getBoundingBox().maxY, blockPos.getZ()));
-    }
-    
-    private static final double MAX_DISTANCE = 1360;
+    private static final double PERCENTAGE_DISTANCE = 20 - 5;
     @Override
-    protected void perform(World world, LivingEntity user, IStandPower power, ActionTarget target) {
-        SoundEvent sound = blinkSound.get();
-
-        if (sound != null) {
-            user.playSound(sound, 1.0F, 1.0F);
+    public void perform(World world, LivingEntity user, IStandPower power, ActionTarget target) {
+        double distance = 5 + (PERCENTAGE_DISTANCE) * (power.getStamina() / power.getMaxStamina()); //5 + 15m*%
+        if (user.hasEffect(ModStatusEffects.RESOLVE.get())){
+            distance = 5 + PERCENTAGE_DISTANCE;
         }
-        double distance = 3 + (MAX_DISTANCE/getStaminaCost(power))*(power.getStamina()/power.getMaxStamina()); //3 + 17m*%
 
         Vector3d blinkPos = null;
         if (target.getType() == TargetType.EMPTY) {
@@ -76,9 +90,12 @@ public class CtrTeleport extends StandAction {
         default:
             break;
         }
-        
+        assert blinkPos != null;
         if (!world.isClientSide()) {
             user.teleportTo(blinkPos.x, blinkPos.y, blinkPos.z);
+            if (blinkSound != null) {
+                world.playSound(null, user.blockPosition(), blinkSound.get(), SoundCategory.PLAYERS, 1, 1);
+            }
         }
     }
 
@@ -86,4 +103,5 @@ public class CtrTeleport extends StandAction {
         double distance = target.getBbWidth() + user.getBbWidth();
         return user.distanceToSqr(target) > distance * distance ? target.position().subtract(user.getLookAngle().scale(distance)) : user.position();
     }
+
 }

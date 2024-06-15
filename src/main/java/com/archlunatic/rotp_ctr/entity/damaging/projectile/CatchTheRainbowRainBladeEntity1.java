@@ -1,8 +1,8 @@
 package com.archlunatic.rotp_ctr.entity.damaging.projectile;
 
-import javax.annotation.Nullable;
-
 import com.archlunatic.rotp_ctr.init.InitEntities;
+import static com.archlunatic.rotp_ctr.entity.stand.stands.CatchTheRainbowEntity.isInRain;
+
 import com.github.standobyte.jojo.action.ActionTarget.TargetType;
 import com.github.standobyte.jojo.entity.damaging.projectile.ModdedProjectileEntity;
 import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
@@ -11,23 +11,19 @@ import com.github.standobyte.jojo.util.general.GeneralUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class CtRainBladeEntity extends ModdedProjectileEntity {
+import javax.annotation.Nullable;
 
-    public CtRainBladeEntity(EntityType<CtRainBladeEntity> type, World world) {
+public class CatchTheRainbowRainBladeEntity1 extends ModdedProjectileEntity {
+
+    public CatchTheRainbowRainBladeEntity1(EntityType<CatchTheRainbowRainBladeEntity1> type, World world) {
         super(type, world);
     }
 
-    public CtRainBladeEntity(LivingEntity shooter, World world) {super(InitEntities.CTR_RAIN_BLADE.get(), shooter, world);}
-
-    private boolean isInRain(Entity entity) {
-        BlockPos blockPos = entity.blockPosition();
-        return entity.level.isRainingAt(blockPos) || entity.level.isRainingAt(new BlockPos(blockPos.getX(), entity.getBoundingBox().maxY, blockPos.getZ()));
-    }
+    public CatchTheRainbowRainBladeEntity1(LivingEntity shooter, World world) {super(InitEntities.CTR_RAIN_BLADE1.get(), shooter, world);}
 
     @Override
     protected boolean hurtTarget(Entity target, @Nullable LivingEntity owner) {
@@ -49,6 +45,9 @@ public class CtRainBladeEntity extends ModdedProjectileEntity {
             super.breakProjectile(targetType, hitTarget);
         }
     }
+
+    @Override
+    protected void addShooterMotion(Entity shooter) { }
 
     @Override
     public int ticksLifespan() {return 100;}
